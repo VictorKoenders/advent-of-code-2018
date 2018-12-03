@@ -1,6 +1,6 @@
 use std::env;
-use std::io::Read;
 use std::fs::File;
+use std::io::Read;
 
 fn main() {
     let file = env::args().nth(1).unwrap();
@@ -10,21 +10,19 @@ fn main() {
     let mut val = 0;
 
     let mut val_history = Vec::new();
+    let mut mutations = Vec::new();
+    for line in str.lines() {
+        if line.is_empty() {
+            continue;
+        }
+
+        let amount = line.parse().unwrap();
+        mutations.push(amount);
+    }
     val_history.push(val);
     loop {
-
-        for line in str.lines() {
-            if line.is_empty() {
-                continue;
-            }
-
-            let direction = &line[..1];
-            let amount = &line[1..].parse().unwrap();
-            match direction {
-                "+" => val += amount,
-                "-" => val -= amount,
-                x => panic!("Unexpected char: {:?}", x)
-            }
+        for amount in &mutations {
+            val += amount;
 
             if val_history.contains(&val) {
                 println!("Reached frequency {:?} twice", val);
